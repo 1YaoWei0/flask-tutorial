@@ -2,6 +2,8 @@ import os
 
 from flask import Flask
 
+from openai import OpenAI
+
 def create_app(test_config = None):
     # Create and configue the app
     app = Flask(__name__, instance_relative_config = True)
@@ -32,4 +34,19 @@ def create_app(test_config = None):
     def hello():
         return 'Hello, World!'
     
+    @app.route('/aitest/')
+    def aitest():
+        client = OpenAI(api_key="sk-613975d20507407399cb67b54a313504", base_url="https://api.deepseek.com")
+
+        response = client.chat.completions.create(
+            model = "deepseek-chat",
+            messages = [
+                {"role": "system", "content": "You are a helpful assistant"},
+                {"role": "user", "content": "Hello"}
+            ],
+            stream = False
+        )
+
+        return response.choices[0].message.content
+
     return app
