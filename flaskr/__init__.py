@@ -34,7 +34,7 @@ def create_app(test_config = None):
     def hello():
         return 'Hello, World!'
     
-    @app.route('/aitest/')
+    @app.route('/aitest/', methods=['GET'])
     def aitest():
         client = OpenAI(api_key="sk-613975d20507407399cb67b54a313504", base_url="https://api.deepseek.com")
 
@@ -48,5 +48,8 @@ def create_app(test_config = None):
         )
 
         return response.choices[0].message.content
+
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=5000)
 
     return app
